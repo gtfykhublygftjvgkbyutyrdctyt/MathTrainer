@@ -1,0 +1,259 @@
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+body {
+  margin: 0;
+  padding: 20px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: #f8fafc;
+  color: #1e293b;
+  min-height: 100vh;
+}
+
+.trainer-container {
+  margin: 0 auto;
+  max-width: 800px;
+  margin-top: 70px;
+  min-width: 0; 
+  padding: 20px 0;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  border-radius:  10%;
+  width: 100%;            
+}
+
+.start-screen {
+  text-align: center;
+  padding: 60px 40px;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+}
+
+.title {
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 20px 0;
+}
+
+.start-description {
+  font-size: 1.1rem;
+  color: #64748b;
+  margin-bottom: 40px;
+  line-height: 1.6;
+}
+
+.start-button {
+  padding: 16px 40px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  background: #3b82f6;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+  transition: all 0.2s ease;
+}
+
+.start-button:hover {
+  background: #2563eb;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(59, 130, 246, 0.4);
+}
+
+.header {
+  padding: 24px;
+  text-align: center;
+}
+
+.stats {
+  font-size: 1.5rem;
+  color: #64748b;
+  margin-top: 12px;
+}
+
+.stat-number {
+  color: #3b82f6;
+}
+
+.stat-total {
+  color: #3b82f6;
+}
+
+.stat-percent {
+  color: #10b981;
+  font-weight: 600;
+}
+
+.difficulty-card {
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.difficulty-label {
+  font-weight: 600;
+  color: #475569;
+  font-size: 1.25rem;
+}
+
+.difficulty-bar {
+  flex: 1;
+  height: 20px;
+  background: #f1f5f9;
+  border-radius: 10px;
+  border: 1px solid #e2e8f0;
+  overflow: hidden;
+}
+
+.difficulty-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #3b82f6, #60a5fa);
+  transition: width 0.5s ease;
+  border-radius: 8px;
+}
+
+.difficulty-value {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #3b82f6;
+  min-width: 45px;
+  text-align: center;
+}
+
+.problem-card {
+  padding: 40px 30px;
+  text-align: center;
+}
+
+.problem-expression {
+  font-size: 4rem;
+  font-weight: 800;
+  color: #1e293b;
+  min-height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.input-section {
+  padding: 24px;
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+.answer-input {
+  width: 200px;
+  padding: 16px;
+  font-size: 1.4rem;
+  background: #f8fafc;
+  border: 2px solid #e2e8f0;
+  border-radius: 10px;
+  color: #1e293b;
+  text-align: center;
+  font-weight: 600;
+  font-family: inherit;
+}
+
+.answer-input:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.answer-input::placeholder {
+  color: #94a3b8;
+}
+
+.answer-input:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background: #f1f5f9;
+}
+
+.check-button {
+  padding: 16px 32px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  background: #3b82f6;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.check-button:hover:not(:disabled) {
+  background: #2563eb;
+}
+
+.check-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  background: #93c5fd;
+}
+
+.feedback {
+  padding: 16px 24px;
+  margin: 0 20px 20px;
+  border-radius: 12px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+.feedback.success {
+  background: #c6ffe4;
+  color: #166534;
+}
+
+.feedback.error {
+  background: #fef2f2;
+  color: #dc2626;
+}
+
+.reset-section {
+  text-align: center;
+  padding: 20px;
+}
+
+.reset-button {
+  padding: 10px 24px;
+  font-size: 0.95rem;
+  background: #f1f5f9;
+  color: #475569;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.reset-button:hover {
+  background: #e2e8f0;
+}
+
+@media (max-width: 500px) {
+  body {
+    padding: 10px;
+  }
+  
+  .problem-expression {
+    font-size: 3rem;
+  }
+  
+  .input-section {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .answer-input {
+    width: 100%;
+    max-width: 280px;
+  }
+}
