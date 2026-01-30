@@ -1,22 +1,17 @@
 import React from 'react';
 import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
-  BarChart, Bar, Cell, PieChart, Pie, Sector
+  BarChart, Bar, Cell, PieChart, Pie
 } from 'recharts';
 import './StatisticsModal.css';
 
 const StatisticsModal = ({ stats, maxLevelCorrectStreak, onClose }) => {
-  const { totalProblems, correctAnswers, responseTimes, accuracyHistory } = stats;
+  const { totalProblems, correctAnswers, responseTimes, accuracyHistory, levelStats } = stats;
   const accuracy = totalProblems > 0 ? Math.round((correctAnswers / totalProblems) * 100) : 0;
-  
-  const avgResponseTime = responseTimes.length > 0 
-    ? (responseTimes.reduce((a, b) => a + b, 0) / responseTimes.length).toFixed(2) 
+
+  const avgResponseTime = responseTimes.length > 0
+    ? (responseTimes.reduce((a, b) => a + b, 0) / responseTimes.length).toFixed(2)
     : 0;
-  const accuracyData = accuracyHistory.map((acc, i) => ({
-    name: `№${i + 1}`,
-    accuracy: acc,
-    isCorrect: acc === 100
-  })).slice(-20);
 
   const responseData = responseTimes.slice(-10).map((time, i) => ({
     name: `№${i + 1}`,
@@ -27,6 +22,17 @@ const StatisticsModal = ({ stats, maxLevelCorrectStreak, onClose }) => {
     { name: 'Правильно', value: correctAnswers, color: '#4CAF50' },
     { name: 'Неправильно', value: totalProblems - correctAnswers, color: '#F44336' }
   ];
+
+  // Time spent on levels
+  const levelTimeData = [];
+  for (let lvl = 1; lvl <= 10; lvl++) {
+    const ls = levelStats?.[lvl.toString()] || { totalTime: 0, count: 0 };
+    const avg = ls.count > 0 ? ls.totalTime / ls.count : 0;
+    levelTimeData.push({
+      level: `Ур. ${lvl}`,
+      averageTime: parseFloat(avg.toFixed(2))
+    });
+  }
 
   return (
     <div className="stats-modal-overlay" onClick={onClose}>
@@ -53,25 +59,6 @@ const StatisticsModal = ({ stats, maxLevelCorrectStreak, onClose }) => {
               <span className="metric-value">{maxLevelCorrectStreak}</span>
               <span>Максимальная серия</span>
             </div>
-          </div>
-
-          <div className="chart-card">
-            <h3>История точности</h3>
-            <ResponsiveContainer width="100%" height={250}>
-              <LineChart data={accuracyData}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="name" />
-                <YAxis type="number" domain={['dataMin', 100]} />
-                <Tooltip />
-                <Line 
-                  type="monotone" 
-                  dataKey="accuracy" 
-                  stroke="#4CAF50" 
-                  strokeWidth={3}
-                  dot={{ fill: '#4CAF50', strokeWidth: 2 }}
-                />
-              </LineChart>
-            </ResponsiveContainer>
           </div>
           <div className="chart-card">
             <h3>Время реакции (последние 10)</h3>
@@ -105,6 +92,7 @@ const StatisticsModal = ({ stats, maxLevelCorrectStreak, onClose }) => {
               </PieChart>
             </ResponsiveContainer>
           </div>
+          
         </div>
       </div>
     </div>
