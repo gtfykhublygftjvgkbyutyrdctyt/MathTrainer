@@ -15,10 +15,10 @@ body {
 
 .trainer-container {
   margin: 0 auto;
-  max-width: 800px;
+  max-width: 850px;
   margin-top: 70px;
   min-width: 0; 
-  padding: 20px 0;
+  padding: 30px 10px;
   box-shadow: 0 4px 20px rgba(0,0,0,0.08);
   border-radius:  10%;
   width: 100%;            
@@ -50,8 +50,8 @@ body {
   padding: 16px 40px;
   font-size: 1.1rem;
   font-weight: 600;
-  background: #3b82f6;
-  color: white;
+  background: var(--interface-color);
+  color: var(--interface-icon-color);
   border: none;
   border-radius: 10px;
   cursor: pointer;
@@ -60,7 +60,7 @@ body {
 }
 
 .start-button:hover {
-  background: #2563eb;
+  filter: brightness(0.80);
   transform: translateY(-1px);
   box-shadow: 0 6px 16px rgba(59, 130, 246, 0.4);
 }
@@ -77,11 +77,11 @@ body {
 }
 
 .stat-number {
-  color: #3b82f6;
+  color: black;
 }
 
 .stat-total {
-  color: #3b82f6;
+  color: black;
 }
 
 .stat-percent {
@@ -113,7 +113,7 @@ body {
 
 .difficulty-fill {
   height: 100%;
-  background: linear-gradient(90deg, #3b82f6, #60a5fa);
+  background: linear-gradient(90deg, var(--interface-color), var(--interface-color));
   transition: width 0.5s ease;
   border-radius: 8px;
 }
@@ -121,7 +121,7 @@ body {
 .difficulty-value {
   font-size: 1.4rem;
   font-weight: 700;
-  color: #3b82f6;
+  color: black;
   min-width: 45px;
   text-align: center;
 }
@@ -162,7 +162,7 @@ body {
 
 .answer-input:focus {
   outline: none;
-  border-color: #3b82f6;
+  border-color: var(--interface-color);
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
 
@@ -180,8 +180,8 @@ body {
   padding: 16px 32px;
   font-size: 1.1rem;
   font-weight: 600;
-  background: #3b82f6;
-  color: white;
+  background: var(--interface-color);
+  color: var(--interface-icon-color);
   border: none;
   border-radius: 10px;
   cursor: pointer;
@@ -189,13 +189,13 @@ body {
 }
 
 .check-button:hover:not(:disabled) {
-  background: #2563eb;
+  filter: brightness(0.80);
 }
 
 .check-button:disabled {
   opacity: 0.6;
   cursor: not-allowed;
-  background: #93c5fd;
+  filter: brightness(0.4);
 }
 
 .feedback {
@@ -254,5 +254,119 @@ body {
   .answer-input {
     width: 100%;
     max-width: 280px;
+  }
+}
+
+.welcome-message {
+  background: linear-gradient(135deg, #e8f4fd 0%, #f0f8ff 100%);
+  border: 2px solid var(--interface-color, #348de6);
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 24px;
+  text-align: center;
+  max-width: 400px;
+}
+
+.welcome-text {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #333;
+  margin: 0 0 8px 0;
+}
+
+.welcome-description {
+  font-size: 1rem;
+  color: #666;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.start-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: center;
+  margin-top: 24px;
+  width: 100%;
+  max-width: 300px;
+}
+
+.settings-button-start {
+  background: transparent;
+  border: 2px solid var(--interface-icon-color, #348de6);
+  color: var(--interface-icon-color, #348de6);
+  padding: 14px 32px;
+  border-radius: 12px;
+  font-size: 1.1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+}
+
+.settings-button-start:hover {
+  background: var(--interface-color, #348de6);
+  color: var(--interface-icon-color);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px var(--interface-color);
+  filter: brightness(0.80);
+  transform: translateY(-1px);
+}
+
+.settings-button-start:active {
+  transform: translateY(0);
+}
+
+.start-button {
+  width: 100%;
+  padding: 16px 32px;
+  font-size: 1.2rem;
+  border-radius: 12px;
+  border: 2px solid var(--interface-icon-color, #348de6);
+}
+.start-button:active {
+  transform: translateY(0);
+}
+
+.start-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 80vh;
+  padding: 20px;
+  text-align: center;
+  border-radius: 12%;
+}
+
+.start-description {
+  color: #666;
+  font-size: 1rem;
+  margin-bottom: 8px;
+  max-width: 300px;
+}
+
+@media (max-width: 480px) {
+  .welcome-message {
+    margin: 0 16px 24px;
+    padding: 20px;
+  }
+
+  .welcome-text {
+    font-size: 1.3rem;
+  }
+
+  .start-buttons {
+    padding: 0 16px;
+    max-width: 100%;
+  }
+
+  .settings-button-start {
+    padding: 12px 24px;
+    font-size: 1rem;
   }
 }

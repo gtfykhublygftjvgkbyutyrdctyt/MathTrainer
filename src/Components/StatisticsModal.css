@@ -54,7 +54,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 90px 40px 20px 40px;  
+  padding: 120px 40px 20px 40px;  
   border-bottom: 1px solid #eee;
   position: relative;
 }
@@ -62,7 +62,7 @@
 .modal-header h2 {
   margin: 0;
   font-size: 1.8em;
-  background: linear-gradient(135deg, #667eea, #764ba2);
+  background: linear-gradient(135deg, black);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   flex-shrink: 0;

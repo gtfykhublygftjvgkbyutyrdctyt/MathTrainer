@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './SettingsModal.css';
+import { HexColorPicker } from "react-colorful";
 
 const SettingsModal = ({
   isOpen,
@@ -9,7 +10,7 @@ const SettingsModal = ({
 }) => {
   const [localSettings, setLocalSettings] = useState({
     goal: 5,
-    theme: 'light',
+    interfaceColor: "#348de6",
     operationsConfig: {
       basic: true,
       powers: false,
@@ -23,7 +24,7 @@ const SettingsModal = ({
     if (isOpen) {
       const safeSettings = {
         goal: settings?.goal ?? 5,
-        theme: settings?.theme ?? 'light',
+        interfaceColor: settings?.interfaceColor ?? "#348de6",
         operationsConfig: {
           basic: settings?.operationsConfig?.basic ?? true,
           powers: settings?.operationsConfig?.powers ?? false,
@@ -65,7 +66,6 @@ const SettingsModal = ({
         current = current[key];
       }
       current[path[path.length - 1]] = value;
-      // Reset trig subs if disabling trig
       if (path[0] === 'trig' && path[1] === 'enabled' && !value) {
         newConfig.trig = { enabled: false, sin: false, cos: false, tan: false, cot: false };
       }
@@ -89,11 +89,26 @@ const SettingsModal = ({
     );
   };
 
+  const isLightColor = (color) => {
+    const hex = color.replace('#', '');
+    const r = parseInt(hex.substr(0, 2), 16);
+    const g = parseInt(hex.substr(2, 2), 16);
+    const b = parseInt(hex.substr(4, 2), 16);
+    const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+    return brightness > 155;
+  };
+
+  const applyInterfaceColor = (color) => {
+    document.documentElement.style.setProperty('--interface-color', color);
+    const iconColor = isLightColor(color) ? '#333333' : '#ffffff';
+    document.documentElement.style.setProperty('--interface-icon-color', iconColor);
+  };
+
   const saveSettings = () => {
     try {
       onSettingsChange(localSettings);
       localStorage.setItem('mathTrainerSettings', JSON.stringify(localSettings));
-      document.body.className = localSettings.theme;
+      applyInterfaceColor(localSettings.interfaceColor);
       onClose();
     } catch (error) {
       console.error('Ошибка сохранения настроек:', error);
@@ -101,10 +116,11 @@ const SettingsModal = ({
   };
 
   const resetSettings = () => {
-    if (!confirm('Сбросить все настройки?')) return;
+    if (!window.confirm('Сбросить все настройки?')) return;
+
     const defaults = {
       goal: 5,
-      theme: 'light',
+      interfaceColor: "#348de6",
       operationsConfig: {
         basic: true,
         powers: false,
@@ -113,10 +129,12 @@ const SettingsModal = ({
         trig: { enabled: false, sin: false, cos: false, tan: false, cot: false }
       }
     };
+
     setLocalSettings(defaults);
     onSettingsChange(defaults);
     localStorage.setItem('mathTrainerSettings', JSON.stringify(defaults));
-    document.body.className = 'light';
+    applyInterfaceColor(defaults.interfaceColor);
+    onClose();
   };
 
   if (!isOpen) return null;
@@ -129,10 +147,13 @@ const SettingsModal = ({
           <h2 className="settings-title">Настройки</h2>
           <button className="settings-close-btn" onClick={onClose}>×</button>
         </div>
+
         <div className="settings-content">
           <h3 className="settings-section-title">Сложность</h3>
           <div className="settings-item">
-            <label className="settings-label">Правильных для уровня:</label>
+            <label className="settings-label">
+              Правильно решенных задач <br /> для повышения уровня:
+            </label>
             <select
               className="settings-select"
               value={localSettings.goal}
@@ -144,6 +165,7 @@ const SettingsModal = ({
               <option value={10}>10</option>
             </select>
           </div>
+
           <h3 className="settings-section-title">Типы операций</h3>
           <div className="operations-grid">
             <label className="operations-main-label" htmlFor="basic-ops">
@@ -155,7 +177,7 @@ const SettingsModal = ({
                 onChange={(e) => handleOperationChange(['basic'], e.target.checked)}
                 aria-label="Включить обычные операции (+, -, ×, ÷)"
               />
-              Обычные (+, -, ×, ÷)
+              Элементарные (+, -, ×, ÷)
             </label>
             <label className="operations-main-label" htmlFor="powers-ops">
               <input
@@ -193,6 +215,7 @@ const SettingsModal = ({
               Корни (&radic;x)
             </label>
           </div>
+
           <div className="operations-group">
             <label className="operations-main-label" htmlFor="trig-enabled">
               <input
@@ -254,19 +277,19 @@ const SettingsModal = ({
               </div>
             )}
           </div>
+
           <h3 className="settings-section-title">Персонализация</h3>
-          <label className="theme-toggle" htmlFor="dark-theme">
-            <input
-              id="dark-theme"
-              type="checkbox"
-              className="theme-checkbox"
-              checked={localSettings.theme === 'dark'}
-              onChange={(e) => handleChange('theme', e.target.checked ? 'dark' : 'light')}
-              aria-label="Включить темную тему"
-            />
-            Темная тема
-          </label>
+          <div className="color-picker-group">
+            <label className="color-picker-label">Цвет интерфейса</label>
+            <div className="color-picker-wrapper">
+              <HexColorPicker
+                color={localSettings.interfaceColor}
+                onChange={(color) => handleChange('interfaceColor', color)}
+              />
+            </div>
+          </div>
         </div>
+
         <div className="settings-actions">
           <button className="btn btn-secondary" onClick={resetSettings}>
             Сбросить

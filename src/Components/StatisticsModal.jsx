@@ -23,7 +23,6 @@ const StatisticsModal = ({ stats, maxLevelCorrectStreak, onClose }) => {
     { name: 'Неправильно', value: totalProblems - correctAnswers, color: '#F44336' }
   ];
 
-  // Time spent on levels
   const levelTimeData = [];
   for (let lvl = 1; lvl <= 10; lvl++) {
     const ls = levelStats?.[lvl.toString()] || { totalTime: 0, count: 0 };
