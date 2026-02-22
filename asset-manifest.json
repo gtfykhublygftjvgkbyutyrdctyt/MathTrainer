@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/MathTrainer/static/css/main.fa0ea9dc.css",
+    "main.js": "/MathTrainer/static/js/main.b940a522.js",
+    "static/js/453.2626b2ce.chunk.js": "/MathTrainer/static/js/453.2626b2ce.chunk.js",
+    "index.html": "/MathTrainer/index.html",
+    "main.fa0ea9dc.css.map": "/MathTrainer/static/css/main.fa0ea9dc.css.map",
+    "main.b940a522.js.map": "/MathTrainer/static/js/main.b940a522.js.map",
+    "453.2626b2ce.chunk.js.map": "/MathTrainer/static/js/453.2626b2ce.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.fa0ea9dc.css",
+    "static/js/main.b940a522.js"
+  ]
+}
