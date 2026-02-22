@@ -292,7 +292,7 @@ body {
 }
 
 .settings-button-start {
-  background: transparent;
+  background: var(--interface-color, #348de6);
   border: 2px solid var(--interface-icon-color, #348de6);
   color: var(--interface-icon-color, #348de6);
   padding: 14px 32px;
