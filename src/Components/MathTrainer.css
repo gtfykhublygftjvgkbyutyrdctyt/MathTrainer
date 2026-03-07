@@ -237,7 +237,7 @@ body {
   background: #e2e8f0;
 }
 
-@media (max-width: 500px) {
+@media (max-width: 550px) {
   body {
     padding: 10px;
   }
@@ -250,10 +250,25 @@ body {
     flex-direction: column;
     align-items: center;
   }
-  
-  .answer-input {
+}
+
+@media (max-width: 370px) {
+  .input-wrapper{
+    display: flex;
+    gap: 10px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .sqrt-button{
+    margin-left: 0 !important;
+  }
+  .answer-input{
+    max-width: 350px;
     width: 100%;
-    max-width: 280px;
+  }
+  .problem-card{
+    padding: 20px 15px;
   }
 }
 
@@ -369,4 +384,12 @@ body {
     padding: 12px 24px;
     font-size: 1rem;
   }
+}
+
+.sqrt-button{
+  width: 66px;
+  height: 64px;
+  font-size: 22px;
+  margin-left: 1.5ex;
+  padding-top: 2px;
 }

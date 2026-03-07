@@ -368,3 +368,21 @@
     grid-template-columns: 1fr 1fr;
   }
 }
+
+.sqrt-button-container {
+  display: flex;
+  gap: 5px;
+  margin-bottom: 10px;
+}
+
+.sqrt-button-checkbox.focus-visible {
+  outline: 2px solid var(--interface-color);
+  outline-offset: 2px;
+}
+
+.sqrt-button-checkbox {
+  width: 1.125rem;
+  height: 1.125rem;
+  accent-color: var(--interface-color);
+  margin-right: 0.625rem;
+}

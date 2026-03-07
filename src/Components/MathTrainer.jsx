@@ -32,10 +32,13 @@ const MathTrainer = ({
 
   const goal = settings?.goal ?? 5;
   const opsConfig = settings?.operationsConfig ?? { basic: true };
+  const showSqrtButton = settings?.showSqrtButton ?? false; // Новая настройка
+  
   const startTimeRef = useRef(null);
   const inputRef = useRef(null);
   const timeoutRef = useRef(null);
 
+  // ==================== ТРИГОНОМЕТРИЧЕСКИЕ КОНСТАНТЫ ====================
 
   const TRIG_ANGLES = {
     standard: [
@@ -102,6 +105,8 @@ const MathTrainer = ({
     2 + Math.sqrt(3), -(2 + Math.sqrt(3)),
   ];
 
+  // ==================== ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ ====================
+
   const getRandomInt = (min, max) => {
     return Math.floor(Math.random() * (max - min + 1)) + min;
   };
@@ -150,19 +155,55 @@ const MathTrainer = ({
 
     const sin15 = (Math.sqrt(6) - Math.sqrt(2)) / 4;
     const sin75 = (Math.sqrt(6) + Math.sqrt(2)) / 4;
-    const tan15 = 2 - Math.sqrt(3);
-    const tan75 = 2 + Math.sqrt(3);
+    const tg15 = 2 - Math.sqrt(3);
+    const tg75 = 2 + Math.sqrt(3);
 
     if (Math.abs(value - sin15) < epsilon) return '(√6-√2)/4';
     if (Math.abs(value + sin15) < epsilon) return '-(√6-√2)/4';
     if (Math.abs(value - sin75) < epsilon) return '(√6+√2)/4';
     if (Math.abs(value + sin75) < epsilon) return '-(√6+√2)/4';
-    if (Math.abs(value - tan15) < epsilon) return '2-√3';
-    if (Math.abs(value + tan15) < epsilon) return '-(2-√3)';
-    if (Math.abs(value - tan75) < epsilon) return '2+√3';
-    if (Math.abs(value + tan75) < epsilon) return '-(2+√3)';
+    if (Math.abs(value - tg15) < epsilon) return '2-√3';
+    if (Math.abs(value + tg15) < epsilon) return '-(2-√3)';
+    if (Math.abs(value - tg75) < epsilon) return '2+√3';
+    if (Math.abs(value + tg75) < epsilon) return '-(2+√3)';
 
     return value.toFixed(4);
+  };
+
+  // Функция для парсинга ответа с поддержкой √
+  const parseAnswer = (answer) => {
+    if (!answer || typeof answer !== 'string') return NaN;
+    
+    let processed = answer.trim();
+    
+    // Замена √2, √3 и т.д. на их значения
+    processed = processed.replace(/√(\d+)/g, (match, num) => {
+      return Math.sqrt(parseFloat(num));
+    });
+    
+    // Обработка дробей типа √2/2, √3/3
+    try {
+      if (processed.includes('/')) {
+        const parts = processed.split('/');
+        if (parts.length === 2) {
+          const numerator = parseFloat(parts[0]) || eval(parts[0]);
+          const denominator = parseFloat(parts[1]) || eval(parts[1]);
+          if (denominator !== 0) {
+            return numerator / denominator;
+          }
+        }
+      }
+      
+      // Попытка вычислить как число
+      const result = parseFloat(processed);
+      if (!isNaN(result)) return result;
+      
+      // Безопасное вычисление простых выражений
+      // eslint-disable-next-line no-eval
+      return eval(processed);
+    } catch {
+      return NaN;
+    }
   };
 
   const isSimilarProblem = useCallback((p1, p2) => {
@@ -176,11 +217,11 @@ const MathTrainer = ({
       if (p1.num1 === p2.num2 && p1.num2 === p2.num1) return true;
     }
 
-    if (['sin', 'cos', 'tan', 'cot'].includes(p1.operation) && p1.operation === p2.operation) {
+    if (['sin', 'cos', 'tg', 'ctg'].includes(p1.operation) && p1.operation === p2.operation) {
       if (Math.abs(p1.correctAnswer - p2.correctAnswer) < 0.0001) return true;
     }
 
-    if (p1.operation === p2.operation && !['sin', 'cos', 'tan', 'cot'].includes(p1.operation)) {
+    if (p1.operation === p2.operation && !['sin', 'cos', 'tg', 'ctg'].includes(p1.operation)) {
       const diff1 = Math.abs(p1.num1 - p2.num1);
       const diff2 = Math.abs((p1.num2 || 0) - (p2.num2 || 0));
       if (diff1 <= 1 && diff2 <= 1) return true;
@@ -199,7 +240,7 @@ const MathTrainer = ({
     if (operation === 'sqrt' && !Number.isInteger(answer)) return false;
     if (operation === 'log' && (!Number.isInteger(answer) || answer <= 0)) return false;
 
-    if (['sin', 'cos', 'tan', 'cot'].includes(operation)) {
+    if (['sin', 'cos', 'tg', 'ctg'].includes(operation)) {
       if (!isNiceTrigValue(answer)) return false;
     }
 
@@ -213,6 +254,16 @@ const MathTrainer = ({
     return num.toString();
   };
 
+  // Функция для вставки символа √
+  const insertSqrt = () => {
+    setUserAnswer(prev => prev + '√');
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  };
+
+  // ==================== ПОЛУЧЕНИЕ ОПЕРАЦИЙ ====================
+
   const getPossibleOperations = useCallback(() => {
     let ops = [];
     if (opsConfig.basic) {
@@ -224,8 +275,8 @@ const MathTrainer = ({
     if (opsConfig.trig?.enabled) {
       if (opsConfig.trig.sin) ops.push('sin');
       if (opsConfig.trig.cos) ops.push('cos');
-      if (opsConfig.trig.tan) ops.push('tan');
-      if (opsConfig.trig.cot) ops.push('cot');
+      if (opsConfig.trig.tg) ops.push('tg');
+      if (opsConfig.trig.ctg) ops.push('ctg');
     }
     return ops.length > 0 ? ops : ['+', '-', '*', '/'];
   }, [opsConfig]);
@@ -266,6 +317,7 @@ const MathTrainer = ({
     return weightedRandomChoice(possibleOps, weights);
   }, [difficulty, getPossibleOperations, recentProblems, errorPatterns]);
 
+  // ==================== КОНФИГУРАЦИЯ СЛОЖНОСТИ ====================
 
   const getDifficultyConfig = useCallback((level) => {
     const baseConfigs = {
@@ -310,9 +362,10 @@ const MathTrainer = ({
     };
   }, []);
 
+  // ==================== ГЕНЕРАЦИЯ ТРИГОНОМЕТРИЧЕСКИХ ЗАДАЧ ====================
+
   const generateTrigProblem = useCallback((operation) => {
     const config = getDifficultyConfig(difficulty);
-    const isInfinity = config.isInfinityMode;
 
     let availableCategories = ['standard'];
 
@@ -342,10 +395,10 @@ const MathTrainer = ({
       const deg = angle.deg;
       const normalizedDeg = ((deg % 360) + 360) % 360;
 
-      if (operation === 'tan') {
+      if (operation === 'tg') {
         return normalizedDeg !== 90 && normalizedDeg !== 270;
       }
-      if (operation === 'cot') {
+      if (operation === 'ctg') {
         return normalizedDeg !== 0 && normalizedDeg !== 180;
       }
       return true;
@@ -376,8 +429,8 @@ const MathTrainer = ({
     switch (operation) {
       case 'sin': answer = Math.sin(radians); break;
       case 'cos': answer = Math.cos(radians); break;
-      case 'tan': answer = Math.tan(radians); break;
-      case 'cot': answer = 1 / Math.tan(radians); break;
+      case 'tg': answer = Math.tan(radians); break;
+      case 'ctg': answer = 1 / Math.tan(radians); break;
       default: answer = 0;
     }
 
@@ -400,8 +453,10 @@ const MathTrainer = ({
     };
   }, [difficulty, getDifficultyConfig]);
 
+  // ==================== ГЕНЕРАЦИЯ ДАННЫХ ЗАДАЧИ ====================
+
   const generateProblemData = useCallback((operation) => {
-    if (['sin', 'cos', 'tan', 'cot'].includes(operation)) {
+    if (['sin', 'cos', 'tg', 'ctg'].includes(operation)) {
       return generateTrigProblem(operation);
     }
 
@@ -577,6 +632,8 @@ const MathTrainer = ({
     return { num1, num2 };
   }, [difficulty, getDifficultyConfig, generateTrigProblem]);
 
+  // ==================== РАСЧЁТ ОТВЕТА ====================
+
   const calculateAnswer = (num1, num2, operation) => {
     const toRad = (deg) => deg * Math.PI / 180;
     switch (operation) {
@@ -589,11 +646,13 @@ const MathTrainer = ({
       case 'sqrt': return Math.sqrt(num1);
       case 'sin': return Math.sin(toRad(num1));
       case 'cos': return Math.cos(toRad(num1));
-      case 'tan': return Math.tan(toRad(num1));
-      case 'cot': return 1 / Math.tan(toRad(num1));
+      case 'tg': return Math.tan(toRad(num1));
+      case 'ctg': return 1 / Math.tan(toRad(num1));
       default: return 0;
     }
   };
+
+  // ==================== ГЕНЕРАЦИЯ НОВОЙ ЗАДАЧИ ====================
 
   const generateNewProblem = useCallback(() => {
     let problem = null;
@@ -604,7 +663,7 @@ const MathTrainer = ({
 
       const operation = generateOperation();
 
-      if (['sin', 'cos', 'tan', 'cot'].includes(operation)) {
+      if (['sin', 'cos', 'tg', 'ctg'].includes(operation)) {
         const trigProblem = generateProblemData(operation);
 
         if (!isValidProblem(trigProblem.num1, trigProblem.num2, operation, trigProblem.correctAnswer)) {
@@ -726,6 +785,8 @@ const MathTrainer = ({
     }
   }, [currentProblem, isChecking, isAnswered]);
 
+  // ==================== СОХРАНЕНИЕ И ЗАГРУЗКА ====================
+
   const saveToStorage = useCallback((statsData, diff, maxStreak, currStreak, problem) => {
     try {
       const data = {
@@ -788,12 +849,7 @@ const MathTrainer = ({
     setCurrentProblem(null);
   };
 
-  const getDifficultyPercent = () => {
-    if (difficulty <= INFINITY_THRESHOLD) {
-      return (difficulty / INFINITY_THRESHOLD) * 100;
-    }
-    return 100;
-  };
+  // ==================== ПРОВЕРКА ОТВЕТА ====================
 
   const checkAnswer = () => {
     if (isChecking || isAnswered) return;
@@ -803,7 +859,8 @@ const MathTrainer = ({
       return;
     }
 
-    const userAnswerNum = parseFloat(userAnswer);
+    // Используем parseAnswer для поддержки √
+    const userAnswerNum = parseAnswer(userAnswer);
     if (isNaN(userAnswerNum)) {
       setFeedback({ message: 'Введите число', type: 'error' });
       return;
@@ -859,7 +916,7 @@ const MathTrainer = ({
     });
 
     let correctDisplay;
-    const isTrig = ['sin', 'cos', 'tan', 'cot'].includes(currentProblem.operation);
+    const isTrig = ['sin', 'cos', 'tg', 'ctg'].includes(currentProblem.operation);
 
     if (isTrig && currentProblem.niceAnswer) {
       correctDisplay = currentProblem.niceAnswer;
@@ -925,7 +982,16 @@ const MathTrainer = ({
     };
   }, [stats, difficulty, maxLevelCorrectStreak, currentStreak, currentProblem, isStarted, saveToStorage]);
 
+  // ==================== ОТОБРАЖЕНИЕ УРОВНЯ ====================
 
+  const getDifficultyPercent = () => {
+    if (difficulty <= INFINITY_THRESHOLD) {
+      return (difficulty / INFINITY_THRESHOLD) * 100;
+    }
+    return 100;
+  };
+
+  // ==================== РЕНДЕР ====================
 
   if (isLoading) {
     return (
@@ -945,7 +1011,7 @@ const MathTrainer = ({
 
           {isFirstVisit ? (
             <div className="welcome-message">
-              <p className="welcome-text"> Добро пожаловать!</p>
+              <p className="welcome-text">Добро пожаловать!</p>
               <p className="welcome-description">
                 Рекомендуем сначала настроить тренажёр под себя.
               </p>
@@ -1004,18 +1070,30 @@ const MathTrainer = ({
       </div>
 
       <div className="input-section">
-        <input
-          ref={inputRef}
-          type="number"
-          step="any"
-          className="answer-input"
-          value={userAnswer}
-          onChange={(e) => setUserAnswer(e.target.value)}
-          onKeyPress={handleKeyPress}
-          placeholder="Ваш ответ"
-          disabled={isChecking || isAnswered}
-          autoFocus
-        />
+        <div className="input-wrapper">
+          <input
+            ref={inputRef}
+            type="text"
+            className="answer-input"
+            value={userAnswer}
+            onChange={(e) => setUserAnswer(e.target.value)}
+            onKeyPress={handleKeyPress}
+            placeholder="Ваш ответ"
+            disabled={isChecking || isAnswered}
+            autoFocus
+          />
+          {showSqrtButton && (
+            <button
+              type="button"
+              className="sqrt-button"
+              onClick={insertSqrt}
+              disabled={isChecking || isAnswered}
+              aria-label="Вставить символ корня"
+            >
+              √
+            </button>
+          )}
+        </div>
         <button
           className="check-button"
           onClick={checkAnswer}

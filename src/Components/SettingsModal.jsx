@@ -11,12 +11,13 @@ const SettingsModal = ({
   const [localSettings, setLocalSettings] = useState({
     goal: 5,
     interfaceColor: "#348de6",
+    showSqrtButton: false, // Новая настройка
     operationsConfig: {
       basic: true,
       powers: false,
       log: false,
       sqrt: false,
-      trig: { enabled: false, sin: false, cos: false, tan: false, cot: false }
+      trig: { enabled: false, sin: false, cos: false, tg: false, ctg: false }
     }
   });
 
@@ -25,6 +26,7 @@ const SettingsModal = ({
       const safeSettings = {
         goal: settings?.goal ?? 5,
         interfaceColor: settings?.interfaceColor ?? "#348de6",
+        showSqrtButton: settings?.showSqrtButton ?? false, // Загрузка настройки
         operationsConfig: {
           basic: settings?.operationsConfig?.basic ?? true,
           powers: settings?.operationsConfig?.powers ?? false,
@@ -34,8 +36,8 @@ const SettingsModal = ({
             enabled: settings?.operationsConfig?.trig?.enabled ?? false,
             sin: settings?.operationsConfig?.trig?.sin ?? false,
             cos: settings?.operationsConfig?.trig?.cos ?? false,
-            tan: settings?.operationsConfig?.trig?.tan ?? false,
-            cot: settings?.operationsConfig?.trig?.cot ?? false
+            tg: settings?.operationsConfig?.trig?.tg ?? false,
+            ctg: settings?.operationsConfig?.trig?.ctg ?? false
           }
         }
       };
@@ -67,7 +69,7 @@ const SettingsModal = ({
       }
       current[path[path.length - 1]] = value;
       if (path[0] === 'trig' && path[1] === 'enabled' && !value) {
-        newConfig.trig = { enabled: false, sin: false, cos: false, tan: false, cot: false };
+        newConfig.trig = { enabled: false, sin: false, cos: false, tg: false, ctg: false };
       }
       return { ...prev, operationsConfig: newConfig };
     });
@@ -83,8 +85,8 @@ const SettingsModal = ({
       (config?.trig?.enabled === true && (
         config.trig.sin === true ||
         config.trig.cos === true ||
-        config.trig.tan === true ||
-        config.trig.cot === true
+        config.trig.tg === true ||
+        config.trig.ctg === true
       ))
     );
   };
@@ -121,12 +123,13 @@ const SettingsModal = ({
     const defaults = {
       goal: 5,
       interfaceColor: "#348de6",
+      showSqrtButton: false,
       operationsConfig: {
         basic: true,
         powers: false,
         log: false,
         sqrt: false,
-        trig: { enabled: false, sin: false, cos: false, tan: false, cot: false }
+        trig: { enabled: false, sin: false, cos: false, tg: false, ctg: false }
       }
     };
 
@@ -212,7 +215,7 @@ const SettingsModal = ({
                 onChange={(e) => handleOperationChange(['sqrt'], e.target.checked)}
                 aria-label="Включить корни (√x)"
               />
-              Корни (&radic;x)
+              Корни (√x)
             </label>
           </div>
 
@@ -252,31 +255,48 @@ const SettingsModal = ({
                   />
                   cos
                 </label>
-                <label htmlFor="trig-tan">
+                <label htmlFor="trig-tg">
                   <input
-                    id="trig-tan"
+                    id="trig-tg"
                     type="checkbox"
                     className="operations-main-checkbox"
-                    checked={!!localSettings.operationsConfig.trig.tan}
-                    onChange={(e) => handleOperationChange(['trig', 'tan'], e.target.checked)}
-                    aria-label="Включить tan"
+                    checked={!!localSettings.operationsConfig.trig.tg}
+                    onChange={(e) => handleOperationChange(['trig', 'tg'], e.target.checked)}
+                    aria-label="Включить tg"
                   />
-                  tan
+                  tg
                 </label>
-                <label htmlFor="trig-cot">
+                <label htmlFor="trig-ctg">
                   <input
-                    id="trig-cot"
+                    id="trig-ctg"
                     type="checkbox"
                     className="operations-main-checkbox"
-                    checked={!!localSettings.operationsConfig.trig.cot}
-                    onChange={(e) => handleOperationChange(['trig', 'cot'], e.target.checked)}
-                    aria-label="Включить cot"
+                    checked={!!localSettings.operationsConfig.trig.ctg}
+                    onChange={(e) => handleOperationChange(['trig', 'ctg'], e.target.checked)}
+                    aria-label="Включить ctg"
                   />
-                  cot
+                  ctg
                 </label>
               </div>
             )}
           </div>
+
+          <h3 className="settings-section-title">Интерфейс</h3>
+          
+          {/* Новая настройка для кнопки √ */}
+          <label htmlFor="sqrt-button-enabled" className="sqrt-button-label">
+            <div className="sqrt-button-container">
+              <input
+                id="sqrt-button-enabled"
+                type="checkbox"
+                className="sqrt-button-checkbox"
+                checked={!!localSettings.showSqrtButton}
+                onChange={(e) => handleChange('showSqrtButton', e.target.checked)}
+                aria-label="Показывать кнопку ввода корня"
+              />
+              Показывать кнопку ввода корня (√)
+            </div>
+          </label>
 
           <h3 className="settings-section-title">Персонализация</h3>
           <div className="color-picker-group">
