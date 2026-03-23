@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import BurgerMenu from './Components/BurgerMenu';
-import MathTrainer from "./Components/MathTrainer";
+import BurgerMenu from './Components/Burgermenu';
+import MathTrainer from './Components/MathTrainer';
 import StatisticsModal from './Components/StatisticsModal';
 import SettingsModal from './Components/SettingsModal';
 import './App.css';

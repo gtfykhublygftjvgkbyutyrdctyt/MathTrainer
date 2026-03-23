@@ -1,34 +1,24 @@
-* {
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
-}
-
-body {
-  margin: 0;
-  padding: 20px;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  background: #f8fafc;
-  color: #1e293b;
-  min-height: 100vh;
-}
-
-.trainer-container {
+.trainerContainer {
   margin: 0 auto;
   max-width: 850px;
   margin-top: 70px;
   min-width: 0; 
   padding: 30px 10px;
   box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-  border-radius:  10%;
+  border-radius: 10%;
   width: 100%;            
 }
 
-.start-screen {
+.startScreen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 80vh;
+  padding: 20px;
   text-align: center;
-  padding: 60px 40px;
+  border-radius: 12%;
   background: white;
-  border-radius: 16px;
   box-shadow: 0 4px 20px rgba(0,0,0,0.08);
 }
 
@@ -39,30 +29,36 @@ body {
   margin: 0 0 20px 0;
 }
 
-.start-description {
-  font-size: 1.1rem;
-  color: #64748b;
-  margin-bottom: 40px;
+.startDescription {
+  color: #666;
+  font-size: 1rem;
+  margin-bottom: 8px;
+  max-width: 300px;
   line-height: 1.6;
 }
 
-.start-button {
-  padding: 16px 40px;
-  font-size: 1.1rem;
+.startButton {
+  width: 100%;
+  padding: 16px 32px;
+  font-size: 1.2rem;
+  border-radius: 12px;
+  border: 2px solid var(--interface-icon-color, #348de6);
   font-weight: 600;
   background: var(--interface-color);
   color: var(--interface-icon-color);
-  border: none;
-  border-radius: 10px;
   cursor: pointer;
   box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
   transition: all 0.2s ease;
 }
 
-.start-button:hover {
+.startButton:hover {
   filter: brightness(0.80);
   transform: translateY(-1px);
   box-shadow: 0 6px 16px rgba(59, 130, 246, 0.4);
+}
+
+.startButton:active {
+  transform: translateY(0);
 }
 
 .header {
@@ -76,33 +72,33 @@ body {
   margin-top: 12px;
 }
 
-.stat-number {
+.statNumber {
   color: black;
 }
 
-.stat-total {
+.statTotal {
   color: black;
 }
 
-.stat-percent {
+.statPercent {
   color: #10b981;
   font-weight: 600;
 }
 
-.difficulty-card {
+.difficultyCard {
   padding: 20px;
   display: flex;
   align-items: center;
   gap: 16px;
 }
 
-.difficulty-label {
+.difficultyLabel {
   font-weight: 600;
   color: #475569;
   font-size: 1.25rem;
 }
 
-.difficulty-bar {
+.difficultyBar {
   flex: 1;
   height: 20px;
   background: #f1f5f9;
@@ -111,14 +107,28 @@ body {
   overflow: hidden;
 }
 
-.difficulty-fill {
+.difficultyFill {
   height: 100%;
   background: linear-gradient(90deg, var(--interface-color), var(--interface-color));
   transition: width 0.5s ease;
   border-radius: 8px;
 }
 
-.difficulty-value {
+.infinityMode {
+  background: linear-gradient(90deg, #f59e0b, #ef4444, #8b5cf6);
+  animation: infinityPulse 2s ease-in-out infinite;
+}
+
+@keyframes infinityPulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+.difficultyValue {
   font-size: 1.4rem;
   font-weight: 700;
   color: black;
@@ -126,12 +136,12 @@ body {
   text-align: center;
 }
 
-.problem-card {
+.problemCard {
   padding: 40px 30px;
   text-align: center;
 }
 
-.problem-expression {
+.problemExpression {
   font-size: 4rem;
   font-weight: 800;
   color: #1e293b;
@@ -140,14 +150,19 @@ body {
   justify-content: center;
 }
 
-.input-section {
+.inputSection {
   padding: 24px;
   display: flex;
   gap: 12px;
   justify-content: center;
 }
 
-.answer-input {
+.inputWrapper {
+  display: flex;
+  align-items: center;
+}
+
+.answerInput {
   width: 200px;
   padding: 16px;
   font-size: 1.4rem;
@@ -160,23 +175,47 @@ body {
   font-family: inherit;
 }
 
-.answer-input:focus {
+.answerInput:focus {
   outline: none;
   border-color: var(--interface-color);
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
 
-.answer-input::placeholder {
+.answerInput::placeholder {
   color: #94a3b8;
 }
 
-.answer-input:disabled {
+.answerInput:disabled {
   opacity: 0.5;
   cursor: not-allowed;
   background: #f1f5f9;
 }
 
-.check-button {
+.sqrtButton {
+  width: 66px;
+  height: 64px;
+  font-size: 22px;
+  margin-left: 1.5ex;
+  padding-top: 2px;
+  background: var(--interface-color);
+  color: var(--interface-icon-color);
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.sqrtButton:hover:not(:disabled) {
+  filter: brightness(0.80);
+}
+
+.sqrtButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.checkButton {
   padding: 16px 32px;
   font-size: 1.1rem;
   font-weight: 600;
@@ -188,11 +227,11 @@ body {
   font-family: inherit;
 }
 
-.check-button:hover:not(:disabled) {
+.checkButton:hover:not(:disabled) {
   filter: brightness(0.80);
 }
 
-.check-button:disabled {
+.checkButton:disabled {
   opacity: 0.6;
   cursor: not-allowed;
   filter: brightness(0.4);
@@ -207,22 +246,22 @@ body {
   text-align: center;
 }
 
-.feedback.success {
+.success {
   background: #c6ffe4;
   color: #166534;
 }
 
-.feedback.error {
+.error {
   background: #fef2f2;
   color: #dc2626;
 }
 
-.reset-section {
+.resetSection {
   text-align: center;
   padding: 20px;
 }
 
-.reset-button {
+.resetButton {
   padding: 10px 24px;
   font-size: 0.95rem;
   background: #f1f5f9;
@@ -233,46 +272,11 @@ body {
   font-weight: 500;
 }
 
-.reset-button:hover {
+.resetButton:hover {
   background: #e2e8f0;
 }
 
-@media (max-width: 550px) {
-  body {
-    padding: 10px;
-  }
-  
-  .problem-expression {
-    font-size: 3rem;
-  }
-  
-  .input-section {
-    flex-direction: column;
-    align-items: center;
-  }
-}
-
-@media (max-width: 370px) {
-  .input-wrapper{
-    display: flex;
-    gap: 10px;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-  }
-  .sqrt-button{
-    margin-left: 0 !important;
-  }
-  .answer-input{
-    max-width: 350px;
-    width: 100%;
-  }
-  .problem-card{
-    padding: 20px 15px;
-  }
-}
-
-.welcome-message {
+.welcomeMessage {
   background: linear-gradient(135deg, #e8f4fd 0%, #f0f8ff 100%);
   border: 2px solid var(--interface-color, #348de6);
   border-radius: 16px;
@@ -282,21 +286,21 @@ body {
   max-width: 400px;
 }
 
-.welcome-text {
+.welcomeText {
   font-size: 1.5rem;
   font-weight: 600;
   color: #333;
   margin: 0 0 8px 0;
 }
 
-.welcome-description {
+.welcomeDescription {
   font-size: 1rem;
   color: #666;
   margin: 0;
   line-height: 1.5;
 }
 
-.start-buttons {
+.startButtons {
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -306,7 +310,7 @@ body {
   max-width: 300px;
 }
 
-.settings-button-start {
+.settingsButtonStart {
   background: var(--interface-color, #348de6);
   border: 2px solid var(--interface-icon-color, #348de6);
   color: var(--interface-icon-color, #348de6);
@@ -323,73 +327,69 @@ body {
   width: 100%;
 }
 
-.settings-button-start:hover {
+.settingsButtonStart:hover {
   background: var(--interface-color, #348de6);
   color: var(--interface-icon-color);
   transform: translateY(-2px);
   box-shadow: 0 4px 12px var(--interface-color);
   filter: brightness(0.80);
-  transform: translateY(-1px);
 }
 
-.settings-button-start:active {
+.settingsButtonStart:active {
   transform: translateY(0);
 }
 
-.start-button {
-  width: 100%;
-  padding: 16px 32px;
-  font-size: 1.2rem;
-  border-radius: 12px;
-  border: 2px solid var(--interface-icon-color, #348de6);
-}
-.start-button:active {
-  transform: translateY(0);
-}
-
-.start-screen {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 80vh;
-  padding: 20px;
-  text-align: center;
-  border-radius: 12%;
-}
-
-.start-description {
-  color: #666;
-  font-size: 1rem;
-  margin-bottom: 8px;
-  max-width: 300px;
+@media (max-width: 550px) {
+  .problemExpression {
+    font-size: 3rem;
+  }
+  
+  .inputSection {
+    flex-direction: column;
+    align-items: center;
+  }
 }
 
 @media (max-width: 480px) {
-  .welcome-message {
+  .welcomeMessage {
     margin: 0 16px 24px;
     padding: 20px;
   }
 
-  .welcome-text {
+  .welcomeText {
     font-size: 1.3rem;
   }
 
-  .start-buttons {
+  .startButtons {
     padding: 0 16px;
     max-width: 100%;
   }
 
-  .settings-button-start {
+  .settingsButtonStart {
     padding: 12px 24px;
     font-size: 1rem;
   }
 }
 
-.sqrt-button{
-  width: 66px;
-  height: 64px;
-  font-size: 22px;
-  margin-left: 1.5ex;
-  padding-top: 2px;
+@media (max-width: 370px) {
+  .inputWrapper {
+    display: flex;
+    gap: 10px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .sqrtButton {
+    margin-left: 0;
+  }
+
+  .answerInput {
+    max-width: 350px;
+    width: 100%;
+  }
+
+  .problemCard {
+    padding: 20px 15px;
+  }
 }

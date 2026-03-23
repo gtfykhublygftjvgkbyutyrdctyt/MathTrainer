@@ -1,4 +1,4 @@
-.burger-btn {
+.burgerBtn {
   position: fixed;
   top: 20px;
   right: 20px;
@@ -19,12 +19,12 @@
   padding: 0;
 }
 
-.burger-btn:hover {
+.burgerBtn:hover {
   filter: brightness(0.85);
   transform: scale(1.05);
 }
 
-.burger-btn span {
+.burgerBtn span {
   display: block;
   width: 24px;
   height: 3px;
@@ -33,19 +33,19 @@
   transition: all 0.3s ease;
 }
 
-.burger-btn.active span:nth-child(1) {
+.burgerBtn.active span:nth-child(1) {
   transform: translateY(9px) rotate(45deg);
 }
 
-.burger-btn.active span:nth-child(2) {
+.burgerBtn.active span:nth-child(2) {
   opacity: 0;
 }
 
-.burger-btn.active span:nth-child(3) {
+.burgerBtn.active span:nth-child(3) {
   transform: translateY(-9px) rotate(-45deg);
 }
 
-.modal-overlay {
+.modalOverlay {
   position: fixed;
   top: 0;
   left: 0;
@@ -53,17 +53,19 @@
   height: 100%;
   background-color: rgba(0, 0, 0, 0.7);
   z-index: 999;
-  opacity: 0;
-  visibility: hidden;
-  transition: all 0.3s ease;
+  animation: fadeIn 0.3s ease;
 }
 
-.modal-overlay.active {
-  opacity: 1;
-  visibility: visible;
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
-.modal-content {
+.modalContent {
   position: fixed;
   top: 0;
   right: 0;
@@ -71,23 +73,26 @@
   height: 100%;
   background-color: white;
   z-index: 1000;
-  padding: 90px 30px 40px;
-  transform: translateX(100%);
-  transition: transform 0.4s ease;
+  padding: 70px 30px 40px;
   box-shadow: -5px 0 25px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
+  animation: slideIn 0.4s ease;
 }
 
-.modal-content.active {
-  transform: translateX(0);
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
 }
 
-.modal-header {
+.modalHeader {
   font-size: 24px;
   font-weight: 700;
   color: #4a6fa5;
-  margin-top: -120px;
   margin-bottom: 30px;
   padding-bottom: 15px;
   border-bottom: 2px solid #f0f0f0;
@@ -96,7 +101,14 @@
   align-items: center;
 }
 
-.close-btn {
+.modalHeader h2 {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 700;
+  color: #4a6fa5;
+}
+
+.closeBtn {
   background: none;
   border: none;
   font-size: 32px;
@@ -113,19 +125,19 @@
   transition: background-color 0.2s;
 }
 
-.close-btn:hover {
+.closeBtn:hover {
   background-color: #f0f0f0;
   color: #333;
 }
 
-.menu-items {
+.menuItems {
   display: flex;
   flex-direction: column;
   gap: 10px;
   margin-bottom: 30px;
 }
 
-.menu-item {
+.menuItem {
   display: flex;
   align-items: center;
   padding: 16px 20px;
@@ -140,26 +152,45 @@
   background-color: #f9f9f9;
   cursor: pointer;
   text-align: left;
+  width: 100%;
 }
 
-.menu-item:hover {
+.menuItem:hover {
   background-color: var(--interface-color);
   color: var(--interface-icon-color);
   transform: translateX(10px);
 }
 
-.item-icon {
+/* === Иконки === */
+.itemIcon {
   margin-right: 15px;
   font-size: 20px;
   width: 24px;
+  height: 24px;
   text-align: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
 }
 
-.item-text {
+.iconBack {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23666'%3E%3Cpath d='M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z'/%3E%3C/svg%3E");
+}
+
+.iconStats {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23666'%3E%3Cpath d='M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z'/%3E%3C/svg%3E");
+}
+
+.iconSettings {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23666'%3E%3Cpath d='M19.14 12.94c.04-.31.06-.63.06-.94 0-.31-.02-.63-.06-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.04.31-.06.63-.06.94s.02.63.06.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z'/%3E%3C/svg%3E");
+}
+
+.itemText {
   flex: 1;
 }
 
-.modal-footer {
+/* === Подвал === */
+.modalFooter {
   margin-top: auto;
   padding-top: 20px;
   border-top: 1px solid #f0f0f0;
@@ -168,25 +199,30 @@
   text-align: center;
 }
 
+.modalFooter p {
+  margin: 0;
+}
+
+/* === Адаптивность === */
 @media (max-width: 768px) {
-  .modal-content {
+  .modalContent {
     width: 280px;
     padding: 80px 20px 30px;
   }
   
-  .burger-btn {
+  .burgerBtn {
     width: 45px;
     height: 45px;
   }
 }
 
 @media (max-width: 480px) {
-  .modal-content {
+  .modalContent {
     width: 250px;
     padding: 70px 15px 25px;
   }
   
-  .menu-item {
+  .menuItem {
     padding: 14px 16px;
     font-size: 16px;
   }

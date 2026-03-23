@@ -1,4 +1,4 @@
-.stats-modal-overlay {
+.statsModalOverlay {
   position: fixed;
   top: 0;
   left: 0;
@@ -10,24 +10,21 @@
   align-items: center;
   justify-content: center;
   padding: 20px;
-  opacity: 0;
-  visibility: hidden;
   animation: fadeIn 0.3s ease forwards;
 }
 
-.stats-modal-overlay.show {
-  opacity: 1;
-  visibility: visible;
-}
-
 @keyframes fadeIn {
+  from {
+    opacity: 0;
+    visibility: hidden;
+  }
   to {
     opacity: 1;
     visibility: visible;
   }
 }
 
-.stats-modal {
+.statsModal {
   background: white;
   border-radius: 16px;
   max-width: 95vw;
@@ -35,7 +32,7 @@
   width: 1100px;
   height: 80vh;
   overflow-y: auto;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
   animation: slideUp 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
@@ -50,28 +47,28 @@
   }
 }
 
-.modal-header {
+.modalHeader {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 6em 40px 20px 40px;  
+  padding: 6em 40px 20px 40px;
   border-bottom: 1px solid #eee;
   position: relative;
 }
 
-.modal-header h2 {
+.modalHeader h2 {
   margin: 0;
   font-size: 1.8em;
   background: linear-gradient(135deg, black);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  background-clip: text;
   flex-shrink: 0;
 }
 
-
-.close-btn {
-  background: var(--hover-bg);
-  border: 2px solid var(--border-color);
+.closeBtn {
+  background: var(--hover-bg, #f8f9fa);
+  border: 2px solid var(--border-color, #eee);
   border-radius: 50%;
   width: 2.5rem;
   height: 2.5rem;
@@ -81,22 +78,23 @@
   align-items: center;
   justify-content: center;
   font-weight: bold;
-  color: var(--text-secondary);
+  color: var(--text-secondary, #555);
+  transition: all 0.2s ease;
 }
 
-.close-btn:hover {
+.closeBtn:hover {
   background: #e9ecef;
   color: #495057;
 }
 
-.stats-grid {
+.statsGrid {
   padding: 32px;
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 24px;
 }
 
-.metrics-card {
+.metricsCard {
   grid-column: 1 / -1;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -111,7 +109,7 @@
   padding: 16px;
 }
 
-.metric-value {
+.metricValue {
   display: block;
   font-size: 2.2em;
   font-weight: bold;
@@ -124,29 +122,31 @@
   color: #666;
 }
 
-.chart-card {
+.chartCard {
   background: white;
   padding: 24px;
   border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   border: 1px solid #eee;
 }
 
-.chart-card h3 {
+.chartCard h3 {
   margin: 0 0 16px 0;
   color: #333;
   font-size: 1.1em;
 }
 
+/* ==================== АДАПТИВНОСТЬ ==================== */
+
 @media (max-width: 780px) {
-  .stats-modal {
+  .statsModal {
     width: 96vw;
     height: 92vh;
     margin: 0 10px;
     border-radius: 16px;
   }
- 
-  .close-btn {
+
+  .closeBtn {
     width: 48px;
     height: 48px;
     font-size: 26px;
@@ -154,9 +154,44 @@
     flex-shrink: 0;
   }
 
-  .stats-grid {
+  .statsGrid {
     padding: 20px 16px;
     grid-template-columns: 1fr;
   }
+
+  .metricsCard {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
+@media (max-width: 480px) {
+  .modalHeader {
+    padding: 3em 20px 16px 20px;
+  }
+
+  .modalHeader h2 {
+    font-size: 1.4em;
+  }
+
+  .metricsCard {
+    padding: 16px;
+    gap: 12px;
+  }
+
+  .metric {
+    padding: 12px;
+  }
+
+  .metricValue {
+    font-size: 1.8em;
+  }
+
+  .chartCard {
+    padding: 16px;
+  }
+
+  .chartCard h3 {
+    font-size: 1em;
+    margin-bottom: 12px;
+  }
+}

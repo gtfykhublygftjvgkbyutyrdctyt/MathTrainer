@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import './BurgerMenu.css';
+import React, { useState, useEffect } from 'react';
+import styles from './BurgerMenu.module.css';
 
 const BurgerMenu = ({ onShowStats, onShowSettings }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -12,70 +12,101 @@ const BurgerMenu = ({ onShowStats, onShowSettings }) => {
     setIsMenuOpen(false);
   };
 
-  const handleItemClick = (item) => {
-    if (item === 'Статистика') {
-      if (onShowStats) onShowStats();
-    } else if (item === 'Настройки') {
-      if (onShowSettings) onShowSettings();
+  useEffect(() => {
+    const handleEscape = (e) => {
+      if (e.key === 'Escape') {
+        closeMenu();
+      }
+    };
+
+    if (isMenuOpen) {
+      document.addEventListener('keydown', handleEscape);
+      document.body.style.overflow = 'hidden';
     }
-    
+
+    return () => {
+      document.removeEventListener('keydown', handleEscape);
+      document.body.style.overflow = 'auto';
+    };
+  }, [isMenuOpen]);
+
+  const handleItemClick = (item) => {
+    switch (item) {
+      case 'Статистика':
+        if (onShowStats) onShowStats();
+        break;
+      case 'Настройки':
+        if (onShowSettings) onShowSettings();
+        break;
+      case 'Тренажер':
+        break;
+      default:
+        break;
+    }
     closeMenu();
   };
 
   return (
     <>
       <button
-        className={`burger-btn ${isMenuOpen ? 'active' : ''}`}
+        className={`${styles.burgerBtn} ${isMenuOpen ? styles.active : ''}`}
         onClick={toggleMenu}
+        aria-label={isMenuOpen ? "Закрыть меню" : "Открыть меню"}
+        type="button"
       >
         <span></span>
         <span></span>
         <span></span>
       </button>
 
-      <div 
-        className={`modal-overlay ${isMenuOpen ? 'active' : ''}`} 
-        onClick={closeMenu}
-      >
+      {isMenuOpen && (
         <div 
-          className={`modal-content ${isMenuOpen ? 'active' : ''}`} 
-          onClick={(e) => e.stopPropagation()}
+          className={styles.modalOverlay}
+          onClick={closeMenu}
         >
-          <div className="modal-header">
-            <h2>Меню</h2>
-          </div>
+          <div 
+            className={styles.modalContent}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className={styles.modalHeader}>
+              <h2>Меню</h2>
+            </div>
 
-          <div className="menu-items">
-            <button 
-              className="menu-item"
-              onClick={() => handleItemClick('Тренажер')}
-            >
-              <div className="item-icon icon-back"></div>
-              <div className="item-text">Вернуться к тренажеру</div>
-            </button>
+            <div className={styles.menuItems}>
+              <button 
+                className={styles.menuItem}
+                onClick={() => handleItemClick('Тренажер')}
+                type="button"
+              >
+                <div className={`${styles.itemIcon} ${styles.iconBack}`}></div>
+                <div className={styles.itemText}>Вернуться к тренажеру</div>
+              </button>
 
-            <button 
-              className="menu-item"
-              onClick={() => handleItemClick('Статистика')}
-            >
-              <div className="item-icon icon-stats"></div>
-              <div className="item-text">Статистика</div>
-            </button>
+              <button 
+                className={styles.menuItem}
+                onClick={() => handleItemClick('Статистика')}
+                type="button"
+              >
+                <div className={`${styles.itemIcon} ${styles.iconStats}`}></div>
+                <div className={styles.itemText}>Статистика</div>
+              </button>
 
-            <button 
-              className="menu-item"
-              onClick={() => handleItemClick('Настройки')}
-            >
-              <div className="item-icon icon-settings"></div>
-              <div className="item-text">Настройки</div>
-            </button>
-          </div>
+              <button 
+                className={styles.menuItem}
+                onClick={() => handleItemClick('Настройки')}
+                type="button"
+              >
+                <div className={`${styles.itemIcon} ${styles.iconSettings}`}></div>
+                <div className={styles.itemText}>Настройки</div>
+              </button>
+            </div>
 
-          <div className="modal-footer">
-            <p>Сайт выполнил: Чабдаров Артур</p>
+            <div className={styles.modalFooter}>
+              <p>Сайт выполнил: Чабдаров Артур</p>
+            </div>
           </div>
         </div>
-      </div>
+      )}
     </>
   );
 };

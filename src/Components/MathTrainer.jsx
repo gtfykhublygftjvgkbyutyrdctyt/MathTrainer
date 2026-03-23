@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import './MathTrainer.css';
+import styles from './MathTrainer.module.css';
 
 const STORAGE_KEY = 'mathTrainerData';
 
@@ -32,13 +32,11 @@ const MathTrainer = ({
 
   const goal = settings?.goal ?? 5;
   const opsConfig = settings?.operationsConfig ?? { basic: true };
-  const showSqrtButton = settings?.showSqrtButton ?? false; // Новая настройка
+  const showSqrtButton = settings?.showSqrtButton ?? false;
   
   const startTimeRef = useRef(null);
   const inputRef = useRef(null);
   const timeoutRef = useRef(null);
-
-  // ==================== ТРИГОНОМЕТРИЧЕСКИЕ КОНСТАНТЫ ====================
 
   const TRIG_ANGLES = {
     standard: [
@@ -105,8 +103,6 @@ const MathTrainer = ({
     2 + Math.sqrt(3), -(2 + Math.sqrt(3)),
   ];
 
-  // ==================== ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ ====================
-
   const getRandomInt = (min, max) => {
     return Math.floor(Math.random() * (max - min + 1)) + min;
   };
@@ -170,18 +166,15 @@ const MathTrainer = ({
     return value.toFixed(4);
   };
 
-  // Функция для парсинга ответа с поддержкой √
   const parseAnswer = (answer) => {
     if (!answer || typeof answer !== 'string') return NaN;
     
     let processed = answer.trim();
     
-    // Замена √2, √3 и т.д. на их значения
     processed = processed.replace(/√(\d+)/g, (match, num) => {
       return Math.sqrt(parseFloat(num));
     });
     
-    // Обработка дробей типа √2/2, √3/3
     try {
       if (processed.includes('/')) {
         const parts = processed.split('/');
@@ -194,12 +187,8 @@ const MathTrainer = ({
         }
       }
       
-      // Попытка вычислить как число
       const result = parseFloat(processed);
       if (!isNaN(result)) return result;
-      
-      // Безопасное вычисление простых выражений
-      // eslint-disable-next-line no-eval
       return eval(processed);
     } catch {
       return NaN;
@@ -254,15 +243,12 @@ const MathTrainer = ({
     return num.toString();
   };
 
-  // Функция для вставки символа √
   const insertSqrt = () => {
     setUserAnswer(prev => prev + '√');
     if (inputRef.current) {
       inputRef.current.focus();
     }
   };
-
-  // ==================== ПОЛУЧЕНИЕ ОПЕРАЦИЙ ====================
 
   const getPossibleOperations = useCallback(() => {
     let ops = [];
@@ -317,8 +303,6 @@ const MathTrainer = ({
     return weightedRandomChoice(possibleOps, weights);
   }, [difficulty, getPossibleOperations, recentProblems, errorPatterns]);
 
-  // ==================== КОНФИГУРАЦИЯ СЛОЖНОСТИ ====================
-
   const getDifficultyConfig = useCallback((level) => {
     const baseConfigs = {
       1: { range: [1, 10], multRange: [2, 5], divRange: [2, 4] },
@@ -361,8 +345,6 @@ const MathTrainer = ({
       maxLogBase: Math.min(10 + infinityLevel, 30),
     };
   }, []);
-
-  // ==================== ГЕНЕРАЦИЯ ТРИГОНОМЕТРИЧЕСКИХ ЗАДАЧ ====================
 
   const generateTrigProblem = useCallback((operation) => {
     const config = getDifficultyConfig(difficulty);
@@ -452,8 +434,6 @@ const MathTrainer = ({
       niceAnswer: formatTrigAnswer(answer),
     };
   }, [difficulty, getDifficultyConfig]);
-
-  // ==================== ГЕНЕРАЦИЯ ДАННЫХ ЗАДАЧИ ====================
 
   const generateProblemData = useCallback((operation) => {
     if (['sin', 'cos', 'tg', 'ctg'].includes(operation)) {
@@ -652,8 +632,6 @@ const MathTrainer = ({
     }
   };
 
-  // ==================== ГЕНЕРАЦИЯ НОВОЙ ЗАДАЧИ ====================
-
   const generateNewProblem = useCallback(() => {
     let problem = null;
     let attempts = 0;
@@ -785,8 +763,6 @@ const MathTrainer = ({
     }
   }, [currentProblem, isChecking, isAnswered]);
 
-  // ==================== СОХРАНЕНИЕ И ЗАГРУЗКА ====================
-
   const saveToStorage = useCallback((statsData, diff, maxStreak, currStreak, problem) => {
     try {
       const data = {
@@ -849,8 +825,6 @@ const MathTrainer = ({
     setCurrentProblem(null);
   };
 
-  // ==================== ПРОВЕРКА ОТВЕТА ====================
-
   const checkAnswer = () => {
     if (isChecking || isAnswered) return;
 
@@ -859,7 +833,6 @@ const MathTrainer = ({
       return;
     }
 
-    // Используем parseAnswer для поддержки √
     const userAnswerNum = parseAnswer(userAnswer);
     if (isNaN(userAnswerNum)) {
       setFeedback({ message: 'Введите число', type: 'error' });
@@ -982,8 +955,6 @@ const MathTrainer = ({
     };
   }, [stats, difficulty, maxLevelCorrectStreak, currentStreak, currentProblem, isStarted, saveToStorage]);
 
-  // ==================== ОТОБРАЖЕНИЕ УРОВНЯ ====================
-
   const getDifficultyPercent = () => {
     if (difficulty <= INFINITY_THRESHOLD) {
       return (difficulty / INFINITY_THRESHOLD) * 100;
@@ -991,12 +962,11 @@ const MathTrainer = ({
     return 100;
   };
 
-  // ==================== РЕНДЕР ====================
 
   if (isLoading) {
     return (
-      <div className="trainer-container">
-        <div className="start-screen">
+      <div className={styles.trainerContainer}>
+        <div className={styles.startScreen}>
           <h1>Загрузка прогресса...</h1>
         </div>
       </div>
@@ -1005,28 +975,28 @@ const MathTrainer = ({
 
   if (!isStarted) {
     return (
-      <div className="trainer-container">
-        <div className="start-screen">
-          <h1 className="title">Математический тренажёр</h1>
+      <div className={styles.trainerContainer}>
+        <div className={styles.startScreen}>
+          <h1 className={styles.title}>Математический тренажёр</h1>
 
           {isFirstVisit ? (
-            <div className="welcome-message">
-              <p className="welcome-text">Добро пожаловать!</p>
-              <p className="welcome-description">
+            <div className={styles.welcomeMessage}>
+              <p className={styles.welcomeText}>Добро пожаловать!</p>
+              <p className={styles.welcomeDescription}>
                 Рекомендуем сначала настроить тренажёр под себя.
               </p>
             </div>
           ) : (
-            <p className="start-description">
+            <p className={styles.startDescription}>
               Нажмите в правый верхний угол для дополнительных функций.
             </p>
           )}
 
-          <div className="start-buttons">
-            <button className="start-button" onClick={startTraining}>
+          <div className={styles.startButtons}>
+            <button className={styles.startButton} onClick={startTraining}>
               Начать тренировку
             </button>
-            <button className="settings-button-start" onClick={onOpenSettings}>
+            <button className={styles.settingsButtonStart} onClick={onOpenSettings}>
               Настройки
             </button>
           </div>
@@ -1036,25 +1006,25 @@ const MathTrainer = ({
   }
 
   return (
-    <div className="trainer-container">
-      <header className="header">
-        <h1 className="title">Математический тренажёр</h1>
-        <div className="stats">
-          Правильно: <span className="stat-number">{stats.correctAnswers}</span>/
-          <span className="stat-total">{stats.totalProblems}</span>
-          (<span className="stat-percent">{Math.round((stats.correctAnswers / stats.totalProblems) * 100 || 0)}%</span>)
+    <div className={styles.trainerContainer}>
+      <header className={styles.header}>
+        <h1 className={styles.title}>Математический тренажёр</h1>
+        <div className={styles.stats}>
+          Правильно: <span className={styles.statNumber}>{stats.correctAnswers}</span>/
+          <span className={styles.statTotal}>{stats.totalProblems}</span>
+          (<span className={styles.statPercent}>{Math.round((stats.correctAnswers / stats.totalProblems) * 100 || 0)}%</span>)
         </div>
       </header>
 
-      <div className="difficulty-card">
-        <span className="difficulty-label">Уровень сложности:</span>
-        <div className="difficulty-bar">
+      <div className={styles.difficultyCard}>
+        <span className={styles.difficultyLabel}>Уровень сложности:</span>
+        <div className={styles.difficultyBar}>
           <div
-            className={`difficulty-fill ${difficulty > INFINITY_THRESHOLD ? 'infinity-mode' : ''}`}
+            className={`${styles.difficultyFill} ${difficulty > INFINITY_THRESHOLD ? styles.infinityMode : ''}`}
             style={{ width: `${getDifficultyPercent()}%` }}
           />
         </div>
-        <span className="difficulty-value">
+        <span className={styles.difficultyValue}>
           {difficulty >= INFINITY_THRESHOLD
             ? `MAX (${currentStreak})`
             : difficulty
@@ -1062,19 +1032,19 @@ const MathTrainer = ({
         </span>
       </div>
 
-      <div className="problem-card">
+      <div className={styles.problemCard}>
         <div
-          className="problem-expression"
+          className={styles.problemExpression}
           dangerouslySetInnerHTML={{ __html: currentProblem?.expression || '...' }}
         />
       </div>
 
-      <div className="input-section">
-        <div className="input-wrapper">
+      <div className={styles.inputSection}>
+        <div className={styles.inputWrapper}>
           <input
             ref={inputRef}
             type="text"
-            className="answer-input"
+            className={styles.answerInput}
             value={userAnswer}
             onChange={(e) => setUserAnswer(e.target.value)}
             onKeyPress={handleKeyPress}
@@ -1085,7 +1055,7 @@ const MathTrainer = ({
           {showSqrtButton && (
             <button
               type="button"
-              className="sqrt-button"
+              className={styles.sqrtButton}
               onClick={insertSqrt}
               disabled={isChecking || isAnswered}
               aria-label="Вставить символ корня"
@@ -1095,7 +1065,7 @@ const MathTrainer = ({
           )}
         </div>
         <button
-          className="check-button"
+          className={styles.checkButton}
           onClick={checkAnswer}
           disabled={isChecking || isAnswered || !currentProblem}
         >
@@ -1104,13 +1074,13 @@ const MathTrainer = ({
       </div>
 
       {feedback.message && (
-        <div className={`feedback ${feedback.type}`}>
+        <div className={`${styles.feedback} ${styles[feedback.type]}`}>
           {feedback.message}
         </div>
       )}
 
-      <div className="reset-section">
-        <button className="reset-button" onClick={startTraining}>
+      <div className={styles.resetSection}>
+        <button className={styles.resetButton} onClick={startTraining}>
           Новая сессия
         </button>
       </div>

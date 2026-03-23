@@ -1,46 +1,28 @@
-:root {
-  --bg-primary: white;
-  --text-primary: #333;
-  --text-secondary: #555;
-  --border-color: #eee;
-  --accent-color: #007bff;
-  --hover-bg: #f8f9fa;
-  --shadow-color: rgba(0, 0, 0, 0.4);
-  --error-bg: #fee2e2;
-  --error-border: #ef4444;
-  --error-text: #dc2626;
-  --btn-secondary-bg: #6c757d;
-  --btn-primary-bg: var(--interface-color);
-  --btn-primary-color: var(--interface-icon-color);
-  --interface-color: #348de6;
-  --interface-icon-color: #ffffff;
-}
-
-.color-picker-group {
+.colorPickerGroup {
   margin-bottom: 20px;
 }
 
-.color-picker-label {
+.colorPickerLabel {
   display: block;
   margin-bottom: 8px;
   font-weight: 500;
   color: #333;
 }
 
-.color-picker-wrapper {
+.colorPickerWrapper {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   gap: 10px;
 }
 
-.color-picker-wrapper .react-colorful {
+.colorPickerWrapper :global(.react-colorful) {
   width: 100%;
   max-width: 200px;
   height: 150px;
 }
 
-.color-input {
+.colorInput {
   width: 100px;
   padding: 8px 12px;
   border: 1px solid #ccc;
@@ -50,14 +32,13 @@
   text-transform: uppercase;
 }
 
-.color-input:focus {
+.colorInput:focus {
   outline: none;
   border-color: #007bff;
   box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
 }
 
-
-.settings-overlay {
+.settingsOverlay {
   position: fixed;
   top: 0;
   left: 0;
@@ -72,7 +53,7 @@
   transition: opacity 0.2s ease;
 }
 
-.settings-modal {
+.settingsModal {
   position: fixed;
   top: 50%;
   left: 50%;
@@ -95,7 +76,7 @@
   }
 }
 
-.settings-header {
+.settingsHeader {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -103,13 +84,13 @@
   border-bottom: 1px solid var(--border-color);
 }
 
-.settings-title {
+.settingsTitle {
   margin: 0;
   font-size: 1.8em;
   color: var(--text-primary);
 }
 
-.settings-close-btn {
+.settingsCloseBtn {
   background: var(--hover-bg);
   border: 2px solid var(--border-color);
   border-radius: 50%;
@@ -124,21 +105,21 @@
   color: var(--text-secondary);
 }
 
-.settings-close-btn:hover {
+.settingsCloseBtn:hover {
   background: var(--border-color);
   color: var(--text-primary);
 }
 
-.settings-close-btn:focus-visible {
+.settingsCloseBtn:focus-visible {
   outline: 2px solid var(--accent-color);
   outline-offset: 2px;
 }
 
-.settings-content {
+.settingsContent {
   padding: 0 2rem 1.5rem;
 }
 
-.error-toast {
+.errorToast {
   position: relative;
   background: var(--error-bg);
   color: var(--error-text);
@@ -163,27 +144,27 @@
   }
 }
 
-.settings-section-title {
+.settingsSectionTitle {
   margin: 1.5rem 0 1rem 0;
   color: var(--text-primary);
   font-size: 1.3em;
   font-weight: 600;
 }
 
-.settings-item {
+.settingsItem {
   display: flex;
   align-items: center;
   padding: 0.75rem 0;
   border-bottom: 1px solid var(--border-color);
 }
 
-.settings-label {
+.settingsLabel {
   flex: 1;
   font-weight: 500;
   color: var(--text-secondary);
 }
 
-.settings-select {
+.settingsSelect {
   padding: 0.5rem 0.75rem;
   border: 1px solid var(--border-color);
   border-radius: 0.375rem;
@@ -192,24 +173,24 @@
   min-width: 5rem;
 }
 
-.settings-select:focus {
+.settingsSelect:focus {
   outline: none;
   border-color: var(--accent-color);
   box-shadow: 0 0 0 0.1875rem rgba(0, 123, 255, 0.1);
 }
 
-.operations-grid {
+.operationsGrid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 1rem;
   margin-bottom: 1rem;
 }
 
-.operations-group {
+.operationsGroup {
   margin-bottom: 1rem;
 }
 
-.operations-main-label {
+.operationsMainLabel {
   padding: 0.5rem 0;
   display: flex;
   align-items: center;
@@ -219,23 +200,23 @@
   transition: background 0.2s;
 }
 
-.operations-main-label:hover {
+.operationsMainLabel:hover {
   background: var(--hover-bg);
 }
 
-.operations-main-checkbox {
+.operationsMainCheckbox {
   width: 1.125rem;
   height: 1.125rem;
   accent-color: var(--interface-color);
   margin-right: 0.625rem;
 }
 
-.operations-main-checkbox:focus-visible {
+.operationsMainCheckbox:focus-visible {
   outline: 2px solid var(--interface-color);
   outline-offset: 2px;
 }
 
-.trig-subgrid {
+.trigSubgrid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 0.5rem;
@@ -246,7 +227,7 @@
   border-radius: 0.5rem;
 }
 
-.trig-subgrid label {
+.trigSubgrid label {
   display: flex;
   align-items: center;
   gap: 0.375rem;
@@ -257,11 +238,11 @@
   transition: background 0.2s;
 }
 
-.trig-subgrid label:hover {
+.trigSubgrid label:hover {
   background: var(--bg-primary);
 }
 
-.theme-toggle {
+.themeToggle {
   display: flex;
   align-items: center;
   gap: 0.75rem;
@@ -272,22 +253,22 @@
   transition: background 0.2s;
 }
 
-.theme-toggle:hover {
+.themeToggle:hover {
   background: var(--hover-bg);
 }
 
-.theme-checkbox {
+.themeCheckbox {
   width: 1.125rem;
   height: 1.125rem;
   accent-color: var(--accent-color);
 }
 
-.theme-checkbox:focus-visible {
+.themeCheckbox:focus-visible {
   outline: 2px solid var(--accent-color);
   outline-offset: 2px;
 }
 
-.settings-actions {
+.settingsActions {
   display: flex;
   gap: 0.75rem;
   justify-content: flex-end;
@@ -305,25 +286,25 @@
   transition: all 0.2s;
 }
 
-.btn-secondary {
+.btnSecondary {
   background: var(--btn-secondary-bg);
   color: white;
 }
 
-.btn-secondary:hover {
+.btnSecondary:hover {
   transform: translateY(-1px);
 }
 
-.btn-primary {
+.btnPrimary {
   background: var(--btn-primary-bg);
   color: var(--interface-icon-color);
 }
 
-.btn-primary:hover {
+.btnPrimary:hover {
   transform: translateY(-1px);
 }
 
-.btn-disabled,
+.btnDisabled,
 .btn:disabled {
   opacity: 0.6;
   cursor: not-allowed;
@@ -336,12 +317,35 @@
   outline-offset: 2px;
 }
 
+.sqrtButtonLabel {
+  display: block;
+}
+
+.sqrtButtonContainer {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 10px;
+}
+
+.sqrtButtonCheckbox {
+  width: 1.125rem;
+  height: 1.125rem;
+  accent-color: var(--interface-color);
+  margin-right: 0.625rem;
+}
+
+.sqrtButtonCheckbox:focus-visible {
+  outline: 2px solid var(--interface-color);
+  outline-offset: 2px;
+}
+
 @media (max-width: 37.5rem) {
-  .settings-overlay {
+  .settingsOverlay {
     padding: 0.625rem;
   }
 
-  .settings-modal {
+  .settingsModal {
     width: 95vw;
     top: 0;
     left: 0;
@@ -353,36 +357,18 @@
     animation: none;
   }
 
-  .settings-header,
-  .settings-content,
-  .settings-actions {
+  .settingsHeader,
+  .settingsContent,
+  .settingsActions {
     padding-left: 1.5rem;
     padding-right: 1.5rem;
   }
 
-  .operations-grid {
+  .operationsGrid {
     grid-template-columns: 1fr;
   }
 
-  .trig-subgrid {
+  .trigSubgrid {
     grid-template-columns: 1fr 1fr;
   }
-}
-
-.sqrt-button-container {
-  display: flex;
-  gap: 5px;
-  margin-bottom: 10px;
-}
-
-.sqrt-button-checkbox.focus-visible {
-  outline: 2px solid var(--interface-color);
-  outline-offset: 2px;
-}
-
-.sqrt-button-checkbox {
-  width: 1.125rem;
-  height: 1.125rem;
-  accent-color: var(--interface-color);
-  margin-right: 0.625rem;
 }

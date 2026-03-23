@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import './SettingsModal.css';
+import styles from './SettingsModal.module.css';
 import { HexColorPicker } from "react-colorful";
 
 const SettingsModal = ({
@@ -11,7 +11,7 @@ const SettingsModal = ({
   const [localSettings, setLocalSettings] = useState({
     goal: 5,
     interfaceColor: "#348de6",
-    showSqrtButton: false, // Новая настройка
+    showSqrtButton: false, 
     operationsConfig: {
       basic: true,
       powers: false,
@@ -21,12 +21,31 @@ const SettingsModal = ({
     }
   });
 
+  // Закрытие по Escape
+  useEffect(() => {
+    const handleEscape = (e) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+
+    if (isOpen) {
+      document.addEventListener('keydown', handleEscape);
+      document.body.style.overflow = 'hidden';
+    }
+
+    return () => {
+      document.removeEventListener('keydown', handleEscape);
+      document.body.style.overflow = 'auto';
+    };
+  }, [isOpen, onClose]);
+
   useEffect(() => {
     if (isOpen) {
       const safeSettings = {
         goal: settings?.goal ?? 5,
         interfaceColor: settings?.interfaceColor ?? "#348de6",
-        showSqrtButton: settings?.showSqrtButton ?? false, // Загрузка настройки
+        showSqrtButton: settings?.showSqrtButton ?? false, 
         operationsConfig: {
           basic: settings?.operationsConfig?.basic ?? true,
           powers: settings?.operationsConfig?.powers ?? false,
@@ -144,21 +163,21 @@ const SettingsModal = ({
 
   return (
     <>
-      <div className="settings-overlay" onClick={onClose} />
-      <div className="settings-modal" onClick={e => e.stopPropagation()}>
-        <div className="settings-header">
-          <h2 className="settings-title">Настройки</h2>
-          <button className="settings-close-btn" onClick={onClose}>×</button>
+      <div className={styles.settingsOverlay} onClick={onClose} />
+      <div className={styles.settingsModal} onClick={e => e.stopPropagation()}>
+        <div className={styles.settingsHeader}>
+          <h2 className={styles.settingsTitle}>Настройки</h2>
+          <button className={styles.settingsCloseBtn} onClick={onClose}>×</button>
         </div>
 
-        <div className="settings-content">
-          <h3 className="settings-section-title">Сложность</h3>
-          <div className="settings-item">
-            <label className="settings-label">
+        <div className={styles.settingsContent}>
+          <h3 className={styles.settingsSectionTitle}>Сложность</h3>
+          <div className={styles.settingsItem}>
+            <label className={styles.settingsLabel}>
               Правильно решенных задач <br /> для повышения уровня:
             </label>
             <select
-              className="settings-select"
+              className={styles.settingsSelect}
               value={localSettings.goal}
               onChange={(e) => handleChange('goal', parseInt(e.target.value))}
             >
@@ -169,24 +188,24 @@ const SettingsModal = ({
             </select>
           </div>
 
-          <h3 className="settings-section-title">Типы операций</h3>
-          <div className="operations-grid">
-            <label className="operations-main-label" htmlFor="basic-ops">
+          <h3 className={styles.settingsSectionTitle}>Типы операций</h3>
+          <div className={styles.operationsGrid}>
+            <label className={styles.operationsMainLabel} htmlFor="basic-ops">
               <input
                 id="basic-ops"
                 type="checkbox"
-                className="operations-main-checkbox"
+                className={styles.operationsMainCheckbox}
                 checked={!!localSettings.operationsConfig?.basic}
                 onChange={(e) => handleOperationChange(['basic'], e.target.checked)}
                 aria-label="Включить обычные операции (+, -, ×, ÷)"
               />
               Элементарные (+, -, ×, ÷)
             </label>
-            <label className="operations-main-label" htmlFor="powers-ops">
+            <label className={styles.operationsMainLabel} htmlFor="powers-ops">
               <input
                 id="powers-ops"
                 type="checkbox"
-                className="operations-main-checkbox"
+                className={styles.operationsMainCheckbox}
                 checked={!!localSettings.operationsConfig?.powers}
                 onChange={(e) => handleOperationChange(['powers'], e.target.checked)}
                 aria-label="Включить степени (n^x)"
@@ -194,23 +213,23 @@ const SettingsModal = ({
               Степени (n<sup>x</sup>)
             </label>
           </div>
-          <div className="operations-grid">
-            <label className="operations-main-label" htmlFor="log-ops">
+          <div className={styles.operationsGrid}>
+            <label className={styles.operationsMainLabel} htmlFor="log-ops">
               <input
                 id="log-ops"
                 type="checkbox"
-                className="operations-main-checkbox"
+                className={styles.operationsMainCheckbox}
                 checked={!!localSettings.operationsConfig?.log}
                 onChange={(e) => handleOperationChange(['log'], e.target.checked)}
                 aria-label="Включить логарифмы (log_a(b))"
               />
               Логарифмы (log<sub>a</sub>(b))
             </label>
-            <label className="operations-main-label" htmlFor="sqrt-ops">
+            <label className={styles.operationsMainLabel} htmlFor="sqrt-ops">
               <input
                 id="sqrt-ops"
                 type="checkbox"
-                className="operations-main-checkbox"
+                className={styles.operationsMainCheckbox}
                 checked={!!localSettings.operationsConfig?.sqrt}
                 onChange={(e) => handleOperationChange(['sqrt'], e.target.checked)}
                 aria-label="Включить корни (√x)"
@@ -219,12 +238,12 @@ const SettingsModal = ({
             </label>
           </div>
 
-          <div className="operations-group">
-            <label className="operations-main-label" htmlFor="trig-enabled">
+          <div className={styles.operationsGroup}>
+            <label className={styles.operationsMainLabel} htmlFor="trig-enabled">
               <input
                 id="trig-enabled"
                 type="checkbox"
-                className="operations-main-checkbox"
+                className={styles.operationsMainCheckbox}
                 checked={!!localSettings.operationsConfig?.trig?.enabled}
                 onChange={(e) => handleOperationChange(['trig', 'enabled'], e.target.checked)}
                 aria-label="Включить тригонометрию"
@@ -232,12 +251,12 @@ const SettingsModal = ({
               Тригонометрия
             </label>
             {localSettings.operationsConfig?.trig?.enabled && (
-              <div className="trig-subgrid">
+              <div className={styles.trigSubgrid}>
                 <label htmlFor="trig-sin">
                   <input
                     id="trig-sin"
                     type="checkbox"
-                    className="operations-main-checkbox"
+                    className={styles.operationsMainCheckbox}
                     checked={!!localSettings.operationsConfig.trig.sin}
                     onChange={(e) => handleOperationChange(['trig', 'sin'], e.target.checked)}
                     aria-label="Включить sin"
@@ -248,7 +267,7 @@ const SettingsModal = ({
                   <input
                     id="trig-cos"
                     type="checkbox"
-                    className="operations-main-checkbox"
+                    className={styles.operationsMainCheckbox}
                     checked={!!localSettings.operationsConfig.trig.cos}
                     onChange={(e) => handleOperationChange(['trig', 'cos'], e.target.checked)}
                     aria-label="Включить cos"
@@ -259,7 +278,7 @@ const SettingsModal = ({
                   <input
                     id="trig-tg"
                     type="checkbox"
-                    className="operations-main-checkbox"
+                    className={styles.operationsMainCheckbox}
                     checked={!!localSettings.operationsConfig.trig.tg}
                     onChange={(e) => handleOperationChange(['trig', 'tg'], e.target.checked)}
                     aria-label="Включить tg"
@@ -270,7 +289,7 @@ const SettingsModal = ({
                   <input
                     id="trig-ctg"
                     type="checkbox"
-                    className="operations-main-checkbox"
+                    className={styles.operationsMainCheckbox}
                     checked={!!localSettings.operationsConfig.trig.ctg}
                     onChange={(e) => handleOperationChange(['trig', 'ctg'], e.target.checked)}
                     aria-label="Включить ctg"
@@ -281,15 +300,14 @@ const SettingsModal = ({
             )}
           </div>
 
-          <h3 className="settings-section-title">Интерфейс</h3>
+          <h3 className={styles.settingsSectionTitle}>Интерфейс</h3>
           
-          {/* Новая настройка для кнопки √ */}
-          <label htmlFor="sqrt-button-enabled" className="sqrt-button-label">
-            <div className="sqrt-button-container">
+          <label htmlFor="sqrt-button-enabled" className={styles.sqrtButtonLabel}>
+            <div className={styles.sqrtButtonContainer}>
               <input
                 id="sqrt-button-enabled"
                 type="checkbox"
-                className="sqrt-button-checkbox"
+                className={styles.sqrtButtonCheckbox}
                 checked={!!localSettings.showSqrtButton}
                 onChange={(e) => handleChange('showSqrtButton', e.target.checked)}
                 aria-label="Показывать кнопку ввода корня"
@@ -298,10 +316,10 @@ const SettingsModal = ({
             </div>
           </label>
 
-          <h3 className="settings-section-title">Персонализация</h3>
-          <div className="color-picker-group">
-            <label className="color-picker-label">Цвет интерфейса</label>
-            <div className="color-picker-wrapper">
+          <h3 className={styles.settingsSectionTitle}>Персонализация</h3>
+          <div className={styles.colorPickerGroup}>
+            <label className={styles.colorPickerLabel}>Цвет интерфейса</label>
+            <div className={styles.colorPickerWrapper}>
               <HexColorPicker
                 color={localSettings.interfaceColor}
                 onChange={(color) => handleChange('interfaceColor', color)}
@@ -310,12 +328,12 @@ const SettingsModal = ({
           </div>
         </div>
 
-        <div className="settings-actions">
-          <button className="btn btn-secondary" onClick={resetSettings}>
+        <div className={styles.settingsActions}>
+          <button className={`${styles.btn} ${styles.btnSecondary}`} onClick={resetSettings}>
             Сбросить
           </button>
           <button
-            className={`btn btn-primary ${!hasValidOperations() ? 'btn-disabled' : ''}`}
+            className={`${styles.btn} ${styles.btnPrimary} ${!hasValidOperations() ? styles.btnDisabled : ''}`}
             onClick={saveSettings}
             disabled={!hasValidOperations()}
           >

@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
   BarChart, Bar, Cell, PieChart, Pie
 } from 'recharts';
-import './StatisticsModal.css';
+import styles from './StatisticsModal.module.css';
 
 const StatisticsModal = ({ stats, maxLevelCorrectStreak, onClose }) => {
   const { totalProblems, correctAnswers, responseTimes, accuracyHistory, levelStats } = stats;
@@ -33,33 +33,50 @@ const StatisticsModal = ({ stats, maxLevelCorrectStreak, onClose }) => {
     });
   }
 
+  // Закрытие по Escape
+  useEffect(() => {
+    const handleEscape = (e) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+
+    document.addEventListener('keydown', handleEscape);
+    document.body.style.overflow = 'hidden';
+
+    return () => {
+      document.removeEventListener('keydown', handleEscape);
+      document.body.style.overflow = 'auto';
+    };
+  }, [onClose]);
+
   return (
-    <div className="stats-modal-overlay" onClick={onClose}>
-      <div className="stats-modal" onClick={e => e.stopPropagation()}>
-        <div className="modal-header">
+    <div className={styles.statsModalOverlay} onClick={onClose}>
+      <div className={styles.statsModal} onClick={e => e.stopPropagation()}>
+        <div className={styles.modalHeader}>
           <h2>Статистика</h2>
-          <button className="close-btn" onClick={onClose}>×</button>
+          <button className={styles.closeBtn} onClick={onClose} aria-label="Закрыть">×</button>
         </div>
-        <div className="stats-grid">
-          <div className="metrics-card">
-            <div className="metric">
-              <span className="metric-value">{accuracy}%</span>
+        <div className={styles.statsGrid}>
+          <div className={styles.metricsCard}>
+            <div className={styles.metric}>
+              <span className={styles.metricValue}>{accuracy}%</span>
               <span>Точность</span>
             </div>
-            <div className="metric">
-              <span className="metric-value">{avgResponseTime}с</span>
+            <div className={styles.metric}>
+              <span className={styles.metricValue}>{avgResponseTime}с</span>
               <span>Среднее время</span>
             </div>
-            <div className="metric">
-              <span className="metric-value">{correctAnswers}/{totalProblems}</span>
+            <div className={styles.metric}>
+              <span className={styles.metricValue}>{correctAnswers}/{totalProblems}</span>
               <span>Правильно/Всего</span>
             </div>
-            <div className="metric">
-              <span className="metric-value">{maxLevelCorrectStreak}</span>
+            <div className={styles.metric}>
+              <span className={styles.metricValue}>{maxLevelCorrectStreak}</span>
               <span>Максимальная серия</span>
             </div>
           </div>
-          <div className="chart-card">
+          <div className={styles.chartCard}>
             <h3>Время реакции (последние 10)</h3>
             <ResponsiveContainer width="100%" height={250}>
               <BarChart data={responseData}>
@@ -71,7 +88,7 @@ const StatisticsModal = ({ stats, maxLevelCorrectStreak, onClose }) => {
               </BarChart>
             </ResponsiveContainer>
           </div>
-          <div className="chart-card">
+          <div className={styles.chartCard}>
             <h3>Общая статистика</h3>
             <ResponsiveContainer width="100%" height={250}>
               <PieChart>
@@ -91,7 +108,6 @@ const StatisticsModal = ({ stats, maxLevelCorrectStreak, onClose }) => {
               </PieChart>
             </ResponsiveContainer>
           </div>
-          
         </div>
       </div>
     </div>
